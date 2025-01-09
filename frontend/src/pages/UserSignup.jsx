@@ -1,31 +1,42 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../context/UserContext";
 
 function UserSignup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [firstName, setFirstName] = useState("");
   const [name, setName] = useState("");
   const [userData, setUserData] = useState({});
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserDataContext);
 
-    setUserData({
-      // fullName:{
-      //   firstName:firstName,
-      //   lastName: lastName
-      // },
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    console.log("Base URL:", import.meta.env.VITE_BASE_URL);
+    const newUser = {
       name: name,
       email: email,
       password: password,
-    });
-
-    // console.log(userData);
-    setEmail("");
-    setName("");
-    // setLastName('')
-    setPassword("");
+    };
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
+      console.log(response);
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        navigate("/home");
+      }
+      setEmail("");
+      setName("");
+      setPassword("");
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
   return (
     <div>
@@ -53,16 +64,6 @@ function UserSignup() {
                   setName(e.target.value);
                 }}
               />
-              {/* <input
-                required
-                className="bg-[#eeeeee] w-1/2 rounded px-4 py-2 border text-lg placeholder:text-base text-black"
-                type="text"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-              /> */}
             </div>
 
             <h3 className="text-lg font-medium mb-2">What is your Email?</h3>
@@ -88,7 +89,7 @@ function UserSignup() {
               placeholder="password"
             />
             <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base">
-              Login
+              Create Account
             </button>
           </form>
           <p className="text-center">
