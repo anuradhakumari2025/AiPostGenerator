@@ -14,10 +14,11 @@ module.exports.registerAdmin = async (req, res, next) => {
     return res.status(400).json({ msg: 'Admin already registered' });
   }
   //only one admin can register
-  const adminCount = await adminModel.countDocuments();
-  if (adminCount > 0) {
-    return res.status(400).json({ msg: 'Only one admin can be registered' });
-  }
+  // const adminCount = await adminModel.countDocuments();
+  // if (adminCount > 0) {
+  //   return res.status(400).json({ msg: 'Only one admin can be registered' });
+  // }
+  
   const hashedPassword = await adminModel.hashPassword(password);
   const admin = await adminServices.createAdmin({
     name,

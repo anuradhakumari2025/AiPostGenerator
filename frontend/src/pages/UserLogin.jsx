@@ -6,24 +6,24 @@ import axios from "axios";
 function UserLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
-
   const { user, setUser } = useContext(UserDataContext);
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    // console.log("Base URL:", import.meta.env.VITE_BASE_URL);
     const userData = {
       email: email,
       password: password,
     };
     const response = await axios.post(
-      `${import.meta.VITE_BASE_URL}/users/login`,
+      `${import.meta.env.VITE_BASE_URL}/users/login`,
       userData
     );
-    if (response.status === 201) {
+    if (response.status === 200) {
       const data = response.data;
       setUser(data.user);
+      localStorage.setItem('token', data.token);
       navigate("/home");
     }
     // console.log(userData);
@@ -72,8 +72,7 @@ function UserLogin() {
         <p className="text-center">
           New Here ?
           <Link to="/signup" className="text-blue-600">
-            {" "}
-            Create new Account{" "}
+            Create new Account
           </Link>
         </p>
       </div>

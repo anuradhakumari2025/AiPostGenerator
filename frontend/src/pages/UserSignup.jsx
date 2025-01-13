@@ -25,10 +25,11 @@ function UserSignup() {
         `${import.meta.env.VITE_BASE_URL}/users/register`,
         newUser
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 201) {
         const data = response.data;
         setUser(data.user);
+        localStorage.setItem("token", data.token);
         navigate("/home");
       }
       setEmail("");
