@@ -2,7 +2,7 @@ const { GoogleGenAI } = require("@google/genai");
 
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({
-  apiKey: "AIzaSyDSUw-LZKPns7xeqXMi0RqMTXrRqugHKpk",
+  apiKey:process.env.GEMINI_API_KEY,
 });
 
 async function generatePostCaption(base64ImageFile) {
@@ -23,7 +23,6 @@ async function generatePostCaption(base64ImageFile) {
       `You are a social media assistant that writes catchy one-line captions with relevant hashtags and emojis. Your responses must be concise and stylish.`,
     },
   });
-  console.log(response.text);
   return response.text;
 }
 
