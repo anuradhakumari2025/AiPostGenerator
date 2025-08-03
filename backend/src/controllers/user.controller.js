@@ -23,7 +23,6 @@ module.exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const newUser = await user.findOne({ username });
-    console.log("New User:", newUser);
     if (!newUser) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -32,11 +31,8 @@ module.exports.loginUser = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Invalid password" });
     }
-    console.log("JWT Secret:", process.env.JWT_SECRET);
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-    console.log("Token:", token);
     res.cookie("token", token);
-    console.log("Cookies:", req.cookies);
     res.status(200).json({
       message: "User logged in successfully",
       user: { username: newUser.username, id: newUser._id },
